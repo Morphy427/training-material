@@ -1,7 +1,7 @@
 ---
 layout: tutorial_hands_on
 
-title: Phylodiversity workflow quick tutorial
+title: Phylodiversity analysis quick tutorial
 zenodo_link: https://doi.org/10.5281/zenodo.15487657
 questions:
 - How to use the phylodiversity workflow?
@@ -14,13 +14,13 @@ time_estimation: ''
 tags:
 - ecology
 - taxonomic data
-contributors:
-- Morphy427
+contributions:
+  authorship:
+    - Morphy427
+    - yvanlebras
 
 ---
 
-
-# Introduction
 
 This tutorial is designed to guide you through the Phylodiversity Galaxy workflow, demonstrating how to easily compute phylodiversity and create phyloregions from phylogeny, occupency and spatial files.
 
@@ -78,14 +78,18 @@ This kind of file must have at least 3 file with the same name and 3 different e
 >    the shared data library (`GTN - Material` -> `{{ page.topic_name }}`
 >     -> `{{ page.title }}`):
 >
+>    For the `csv` and `newick` datafiles
 >    ```
->    https://zenodo.org/api/records/15487657/files/shapefile.dbf/content
->    https://zenodo.org/api/records/15487657/files/shapefile.prj/content
->    https://zenodo.org/api/records/15487657/files/phylogeny_test/content
->    https://zenodo.org/api/records/15487657/files/shapefile.shx/content
->    https://zenodo.org/api/records/15487657/files/shapefile.shp/content
->    https://zenodo.org/api/records/15487657/files/composite_dataset_shp.html/content
->    https://zenodo.org/api/records/15487657/files/grid_test.csv/content
+>    https://zenodo.org/records/15487657/files/phylogeny_test
+>    https://zenodo.org/records/15487657/files/grid_test.csv
+>    ```
+>
+>    For the composite `shp` datafile (you here need to download locally each file to upload it from the "Composite" menu of "Upload Files" tool, selecting `shp` datatype)
+>    ```
+>    https://zenodo.org/records/15487657/files/shapefile.dbf
+>    https://zenodo.org/records/15487657/files/shapefile.prj
+>    https://zenodo.org/records/15487657/files/shapefile.shx
+>    https://zenodo.org/records/15487657/files/shapefile.shp
 >    ```
 >
 >
@@ -94,11 +98,11 @@ This kind of file must have at least 3 file with the same name and 3 different e
 >    {% snippet faqs/galaxy/datasets_import_from_data_library.md %}
 >
 > 3. Rename the datasets
-> 4. Check that the datatype of the phylogenic phyle is newick, the occupancy file is tabular and the shape file is a composite dataset of type shapefile
+> 4. Check that the datatype of the phylogenic file is `newick` (often not automatically detected to this format but `json`),  occupancy file `tabular` and the spatial file a composite dataset of type `shapefile`
 >
->    {% snippet faqs/galaxy/datasets_change_datatype.md datatype="datatypes" %}
+>    {% snippet faqs/galaxy/datasets_change_datatype.md datatype="newick" %}
 >
-> 5. Add to each database a tag corresponding to ...
+> 5. A good pratice is also to add to each datafile a tag corresponding for example to the taxon, here `Actinopterygians` or other relevant information.
 >
 >    {% snippet faqs/galaxy/datasets_add_tag.md %}
 >
@@ -158,8 +162,8 @@ The first step is to be sure your data are well formated. If all your file are i
 > <hands-on-title> run PhyloIndex </hands-on-title>
 >
 > 1. {% tool [PhyloIndex](toolshed.g2.bx.psu.edu/repos/ecology/phylo_index/phylo_index/1.0+galaxy0) %} with the following parameters:
->    - {% icon param-file %} *"Phylogeny file (Newick format)"*: `output1` (output of **PhylOccuMatcher** {% icon tool %})
->    - {% icon param-file %} *"Occupancy data (Tabular format)"*: `output2` (output of **PhylOccuMatcher** {% icon tool %})
+>    - {% icon param-file %} *"Phylogeny file (Newick format)"*: `Phylogeny with occupancy data` (output of **PhylOccuMatcher** {% icon tool %})
+>    - {% icon param-file %} *"Occupancy data (Tabular format)"*: `Matched output data` (output of **PhylOccuMatcher** {% icon tool %})
 >
 >
 >    > <comment-title> short description </comment-title>
@@ -178,8 +182,8 @@ The default value is the tipshuffle method
 > <hands-on-title> run EstimEndem </hands-on-title>
 >
 > 1. {% tool [EstimEndem](toolshed.g2.bx.psu.edu/repos/ecology/estimate_endem/estimate_endem/0.1.0+galaxy0) %} with the following parameters:
->    - {% icon param-file %} *"Phylogeny file (Newick format)"*: `output1` (output of **PhylOccuMatcher** {% icon tool %})
->    - {% icon param-file %} *"Occupancy data (Tabular format)"*: `output2` (output of **PhylOccuMatcher** {% icon tool %})
+>    - {% icon param-file %} *"Phylogeny file (Newick format)"*: `Phylogeny with occupancy data` (output of **PhylOccuMatcher** {% icon tool %})
+>    - {% icon param-file %} *"Occupancy data (Tabular format)"*: `Matched output data` (output of **PhylOccuMatcher** {% icon tool %})
 >    - {% icon param-file %} *"input_shapefile"*: `shapefile` (output of **CRSconverter** {% icon tool %})
 >
 >
@@ -187,12 +191,11 @@ The default value is the tipshuffle method
 >    >
 >    > The output of this tool is a shapefile withe the clusterisation done in function of the endemism. You'll have to choose a number of cluster you want and the clustering method you want.
 >    {: .comment}
->    > <comment-title> more tips and info </comment-title>
+>    > <comment-title> More tips and info </comment-title>
 >    >
 >    > If you have no idea how many cluster you want, the tool start with an estimation of how many clusters are optimal between 0 to 30. So you can firstly run the tool with default value and go check the standard output to check the recommanded number. However keep in mind that this estimation is purely statistics and don't always have biologic reasons.
 >    {: .comment}
 >
-{: .hands_on}
 {: .hands_on}
 
 # Conclusion
